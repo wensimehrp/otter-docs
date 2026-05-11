@@ -1,36 +1,77 @@
-#let _split-route(route) = {
-  route.split(regex("/+")).filter(it => it.len() != 0)
-}
-#import "renderers.typ"
-
-#let document-page(
-  c,
-  route: auto,
-  title: none,
-  description: none,
+#let chapter(
+  path,
+  content: auto,
+  children: (),
   ..args,
-  root: "/",
-  html-renderer: renderers.html-renderer,
-  paged-renderer: renderers.paged-renderer,
+) = {
+  let path = if type(path) == array { path } else { path.split("/").filter(it => it.len() > 0) }
+  (
+    kind: "chapter",
+    path: path,
+    content: if content == auto {
+      include path.join("/") + ".typ"
+    } else {
+      content
+    },
+    children: children,
+    ..args.named(),
+  )
+}
+
+#let normalize-tree(tree, root) = {
+  let new-tree = ()
+  for it in tree {
+    if type(it) != dictionary or "kind" not in it {
+      it = (
+        kind: "other",
+        content: it,
+      )
+    }
+    if "path" in it {
+      it = (..it, path: root + it.path)
+    }
+    if "children" in it {
+      it = (..it, children: normalize-tree(it.children, root))
+    }
+    new-tree.push(it)
+  }
+  new-tree
+}
+
+#import "renderers.typ": html-renderer, paged-renderer
+
+#let book(
+  title: "",
+  description: "",
+  authors: (),
+  root: (),
+  language: "en",
+  html-renderer: html-renderer,
+  paged-renderer: paged-renderer,
+  tree: (),
+  ..args,
 ) = context {
-  assert(
-    type(title) == str,
-    message: "You must have a title and it must be a string",
-  )
-  assert(
-    type(description) == str,
-    message: "You must have a piece of description and it must be a string",
-  )
-  let route = _split-route(root + route)
-  if target() == "bundle" {
-    document(
-      route.join("/"),
-      title: title,
+  let root = if type(root) == array { root } else { root.split("/").filter(it => it.len() > 0) }
+  assert(type(authors) == array, message: "Authors must be an array of strings.")
+  let normalized = normalize-tree(tree, root)
+  if target() in ("bundle", "paged") {
+    paged-renderer(
+      normalized,
       description: description,
+      authors: authors,
+      root: root,
+      language: language,
       ..args,
-      html-renderer(c, route, title, description, args),
     )
-  } else {
-    paged-renderer(c)
+  }
+  if target() in ("bundle",) {
+    html-renderer(
+      normalized,
+      description: description,
+      authors: authors,
+      root: root,
+      language: language,
+      ..args,
+    )
   }
 }
