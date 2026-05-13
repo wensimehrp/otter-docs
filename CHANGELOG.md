@@ -3,7 +3,7 @@
 This is the change log for [Otter Docs](https://github.com/wensimehrp/otter-docs),
 a pure Typst documentation framework.
 
-## UNRELEASED
+# UNRELEASED
 
-- Basic documentation functions
+- Basic documentation features
 - Typst template

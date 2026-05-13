@@ -18,6 +18,23 @@
   )
 }
 
+// https://github.com/typst/typst/issues/2196#issuecomment-1728135476
+#let to-string(it) = {
+  if type(it) == str {
+    it
+  } else if type(it) != content {
+    str(it)
+  } else if it.has("text") {
+    it.text
+  } else if it.has("children") {
+    it.children.map(to-string).join()
+  } else if it.has("body") {
+    to-string(it.body)
+  } else if it == [ ] {
+    " "
+  }
+}
+
 #let normalize-tree(tree, root) = {
   let new-tree = ()
   for it in tree {
@@ -32,19 +49,25 @@
       it.insert("page-label", label("page:/" + it.path.join("/")))
     }
     if it.kind == "chapter" {
+      // The correct practise is to use label here; however we couldn't use that because of
+      // https://github.com/typst/typst/issues/2926
+      // So we manually construct (heading, href) pairs instead
       let chapter-heading-state = state(it.path.join("/") + " chapter state", ())
       let chapter-title-state = state(it.path.join("/") + " title state", none)
       it.content = {
-        show heading.where(level: 1): heading => {
-          let heading-label = none
-          if "label" in heading.fields() {
-            heading-label = heading.label
-            heading
+        show heading.where(level: 1, outlined: true): h => {
+          let key = lower(to-string(h).replace(" ", "-"))
+          chapter-heading-state.update(arr => (
+            arr
+              + (
+                (h, "/" + it.path.join("/") + ".html#" + key),
+              )
+          ))
+          if target() == "html" {
+            html.h2(id: key, h.body)
           } else {
-            heading-label = label(it.path.join("/") + ":" + heading.body.text)
-            [#heading #heading-label]
+            h.body
           }
-          chapter-heading-state.update(it => it + (heading-label,))
         }
         show title: title => {
           chapter-title-state.update(it => title.body)
@@ -53,7 +76,7 @@
         it.content
       }
       it.insert("title", chapter-title-state.final())
-      it.insert("headings", chapter-heading-state.final())
+      it.insert("headings", chapter-heading-state.final().dedup())
     }
     if "children" in it {
       it = (..it, children: normalize-tree(it.children, root))
