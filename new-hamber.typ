@@ -93,9 +93,8 @@
   show footnote: it => span(class: "footnote", {
     footnote-state.update(state => state + (it,))
     let len = footnote-state.get().len()
-    let final-len = footnote-state.final().len()
-    sup(id: "loc-" + str(len), a(
-      href: "#loc-" + str(final-len + len),
+    sup(id: "footnote-ref-" + str(len), a(
+      href: "#footnote-source-" + str(len),
       numbering(it.numbering, len + 1),
     ))
     span(
@@ -103,7 +102,6 @@
       it.body,
     )
   })
-  // show footnote.entry: it => []
 
   input(class: "z-10 fixed peer md:hidden top-4 left-4 checked:translate-x-72 transition-transform", type: "checkbox")
   nav(
@@ -133,9 +131,9 @@
           note,
         ) in final.enumerate() {
           li(
-            id: "loc-" + str(final.len() + idx),
+            id: "footnote-source-" + str(idx),
             sup(a(
-              href: "#loc-" + str(idx),
+              href: "#footnote-ref-" + str(idx),
               numbering(note.numbering, idx + 1),
             ))
               + note.body,

@@ -1,7 +1,5 @@
 #title[Demo]
 
-#set heading(numbering: "1.")
-
 = Typography <typography>
 
 Tailwind Typography and Typst helps styling `inline code`, coloured inline code:
