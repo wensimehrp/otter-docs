@@ -15,15 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-
-      - name: Download and install Typhoon
-        run: |
-          curl -L -o typhoon.tar.xz \
-            https://github.com/WenSimEHRP/tailwindcss-typst/releases/download/0.1.2/typhoon.tar.xz
-          tar -xf typhoon.tar.xz
-          mkdir -p ~/.local/share/typst/packages/local/typhoon/0.1.2
-          mv dist/* ~/.local/share/typst/packages/local/typhoon/0.1.2/
-
       - uses: DeterminateSystems/nix-installer-action@v20
       - uses: DeterminateSystems/magic-nix-cache-action@v13
 

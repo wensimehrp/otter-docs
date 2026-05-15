@@ -217,7 +217,7 @@
 ) = {
   // first generate the tailwind preflight
   let site-title = title
-  import "@local/typhoon:0.1.2"
+  import "@preview/typhoon:0.1.2"
   let stylesheet-path = "/" + root.join("/") + "/styles.css"
   let page-classes = state("__new_hamber page classes", "")
   asset(
