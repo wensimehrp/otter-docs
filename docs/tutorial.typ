@@ -52,7 +52,7 @@ would be reflected immediately.
 
 == Building with the Web App
 
-_(The typst.app web app currently does not support the bundle target and MathML exports)_.
+_The `typst.app` web app currently does not support the bundle target and MathML exports_.
 
 = Authoring
 

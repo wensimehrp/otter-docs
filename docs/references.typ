@@ -50,6 +50,11 @@ References for functions in Otter Docs.
 
   heading(level: 2)[Parameters]
 
+  if func-def.args.len() == 0 [
+    _This function does not have any parameters._
+    #continue
+  ]
+
   for (key, val) in func-def.args {
     heading(level: 3, {
       html.span(class: "font-mono mr-8", key)
