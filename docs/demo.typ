@@ -103,6 +103,39 @@ $
   f(x) = sum^oo_(n=0) (f^((n))(a))/(n!) (x - a)^n
 $
 
+$
+  x + y^(2/(k + 1))
+$
+
+$
+  x^(z^d_c)_(y^a_b)
+$
+
+$
+  det(A) = sum_(sigma in S_n) epsilon(sigma) product^n_(i = 1) a_(i, sigma_i)
+$
+
+$
+  {
+    underbrace(
+      overbrace(a comma dots comma a, k a"'s") comma
+      overbrace(b comma dots comma b, l b"'s"),
+      k + l "elements"
+    )
+  }
+$
+
+$
+  det mat(
+    delim: "|",
+    c_0, c_1, c_2, dots, c_n;
+    c_1, c_2, c_3, dots, c_(n+1);
+    c_2, c_3, c_4, dots, c_(n+2);
+    dots.v, dots.v, dots.v, dots.down, dots.v;
+    c_n, c_(n+1), c_(n+2), dots, c_(2n);
+  ) > 0
+$
+
 = Lists
 
 Unordered list:
