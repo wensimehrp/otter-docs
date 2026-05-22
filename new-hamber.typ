@@ -115,7 +115,7 @@
   nav(
     class: "w-72 z-10 flex fixed left-0 top-0 h-full -translate-x-full shadow-sm md:shadow-none peer-checked:translate-x-0 md:translate-x-0 flex-col border-r border-neutral-300 bg-neutral-100 transition-transform",
     {
-      a(href: "https://en.wikipedia.org/wiki/File:Sea_Otter_(Enhydra_lutris)_(25169790524)_crop.jpg", sidebar-image)
+      sidebar-image
       div(
         class: "border-t border-neutral-300 overflow-x-auto",
         {
@@ -223,9 +223,12 @@
   ],
   extra-css: none,
   extra-head-content: none,
-  sidebar-image: html.img(
-    class: "w-full h-45 object-cover object-top",
-    src: "https://upload.wikimedia.org/wikipedia/commons/0/02/Sea_Otter_%28Enhydra_lutris%29_%2825169790524%29_crop.jpg",
+  sidebar-image: html.a(
+    href: "https://en.wikipedia.org/wiki/File:Sea_Otter_(Enhydra_lutris)_(25169790524)_crop.jpg",
+    html.img(
+      class: "w-full h-45 object-cover object-top",
+      src: "https://upload.wikimedia.org/wikipedia/commons/0/02/Sea_Otter_%28Enhydra_lutris%29_%2825169790524%29_crop.jpg",
+    ),
   ),
   ..args,
 ) = {
