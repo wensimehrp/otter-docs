@@ -1,3 +1,7 @@
+:root {
+    scroll-behavior: smooth;
+}
+
 .footnote {
     position: relative;
     display: inline-block;
