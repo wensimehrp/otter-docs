@@ -13,28 +13,18 @@
 
 #let summary-renderer(current-tree, current-chapter) = for it in current-tree {
   html.div(
-    class: "w-full relative"
-      + if "page-label" in it and it.page-label == current-chapter.page-label {
-        (
-          " border-neutral-300 dark:border-transparent dark:bg-zinc-600 "
-            + if it.headings.len() > 0 { " border-t " } else { " border-y " }
-        )
-      },
-    if it.kind == "chapter" {
-      html.div(
-        class: if it.page-label == current-chapter.page-label { "bg-white dark:bg-zinc-600 " }
-          + "block w-full px-2 py-1 hover:bg-neutral-500/30".split(" ").map(it => "[&>a]:" + it).join(" "),
-        std.link(it.page-label, it.title),
-      )
-      if it.page-label == current-chapter.page-label and it.headings.len() > 0 {
-        html.div(
-          class: "border-y border-neutral-300 dark:border-transparent bg-white dark:bg-zinc-700 "
-            + "px-2 py-1 block hover:bg-neutral-500/30".split(" ").map(it => "[&>a]:" + it).join(" "),
-          for label in it.headings {
-            std.link(label, query(label).at(0).body)
-          },
-        )
+    class: {
+      "w-full relative [&>a]:block [&>a]:border-y [&>a]:px-2 [&>a]:py-1"
+      if "page-label" in it and it.page-label == current-chapter.page-label {
+        " [&>a]:border-neutral-300 [&>a]:bg-white"
+        " [&>a]:dark:border-transparent [&>a]:dark:bg-zinc-700"
+      } else {
+        " [&>a]:border-transparent"
+        " [&>a]:hover:bg-neutral-200 [&>a]:dark:hover:bg-zinc-700"
       }
+    },
+    if it.kind == "chapter" {
+      std.link(it.page-label, it.title)
     } else if it.kind == "separator" {
       html.div(class: "w-full bg-neutral-300 dark:bg-zinc-600 h-[1px] my-3")
     } else {
@@ -144,31 +134,35 @@
   div(class: "group", {
     div(class: "relative", {
       input(
-        class: "z-10 fixed md:hidden"
-          + " peer appearance-none"
-          + " left-0 top-1/2 w-8 h-20"
-          + " -translate-y-1/2"
-          + " checked:translate-y-0 checked:translate-x-72 checked:top-0"
-          + " checked:w-full checked:h-full",
+        class: {
+          "z-10 fixed md:hidden"
+          " peer appearance-none"
+          " left-0 top-1/2 w-8 h-20"
+          " -translate-y-1/2"
+          " checked:translate-y-0 checked:translate-x-72 checked:top-0"
+          " checked:w-full checked:h-full"
+        },
         type: "checkbox",
       )
-      div(
-        class: "flex items-center justify-center"
-          + " z-5 fixed top-1/2 w-8 h-20"
-          + " border-r border-t border-b border-neutral-300"
-          + " bg-neutral-100 text-neutral-400"
-          + " dark:border-transparent dark:bg-zinc-700"
-          + " rounded-r-sm shadow-sm"
-          + " md:hidden -translate-y-1/2 peer-checked:translate-x-72"
-          + " transition-transform text-3xl",
-      )[|||]
+      div(class: {
+        "flex items-center justify-center"
+        " z-5 fixed top-1/2 w-8 h-20"
+        " border-r border-t border-b border-neutral-300"
+        " bg-neutral-100 text-neutral-400"
+        " dark:border-transparent dark:bg-zinc-700"
+        " rounded-r-sm shadow-sm"
+        " md:hidden -translate-y-1/2 peer-checked:translate-x-72"
+        " transition-transform text-3xl"
+      })[|||]
     })
     nav(
-      class: "dark:text-white w-72 z-10 flex fixed left-0 top-0 h-full"
-        + " -translate-x-full shadow-sm md:shadow-none"
-        + " group-has-[:checked]:translate-x-0 md:translate-x-0 flex-col"
-        + " border-r border-neutral-300 dark:border-transparent bg-neutral-100"
-        + " dark:bg-zinc-800 transition-transform",
+      class: {
+        "dark:text-white w-72 z-10 flex fixed left-0 top-0 h-full"
+        " -translate-x-full shadow-sm md:shadow-none"
+        " group-has-[:checked]:translate-x-0 md:translate-x-0 flex-col"
+        " border-r border-neutral-300 dark:border-transparent bg-neutral-100"
+        " dark:bg-zinc-800 transition-transform"
+      },
       {
         sidebar-image
         if pagefind-enabled {
@@ -184,16 +178,19 @@
       },
     )
   })
-  article(
-    class: "p-3 sm:p-6 md:p-8 max-w-4xl md:ml-72"
-      + " prose prose-neutral dark:prose-invert leading-normal"
-      + " prose-pre:bg-neutral-100 prose-pre:text-neutral-900"
-      + " prose-pre:border prose-pre:border-neutral-300"
-      + " dark:prose-pre:!bg-black dark:prose-pre:!text-neutral-100"
-      + " dark:prose-pre:!border-transparent"
-      + " prose-pre:rounded-none"
-      + " prose-a:decoration-1 prose-a:underline-offset-4"
-      + " prose-a:hover:decoration-3",
+
+  let main-content = article(
+    class: {
+      "p-3 sm:p-6 md:p-8 min-w-full"
+      " prose prose-neutral dark:prose-invert leading-normal"
+      " prose-pre:bg-neutral-100 prose-pre:text-neutral-900"
+      " prose-pre:border prose-pre:border-neutral-300"
+      " dark:prose-pre:!bg-black dark:prose-pre:!text-neutral-100"
+      " dark:prose-pre:!border-transparent"
+      " prose-pre:rounded-none"
+      " prose-a:decoration-1 prose-a:underline-offset-4"
+      " prose-a:hover:decoration-3"
+    },
     {
       it.content
       // footnote
@@ -210,6 +207,28 @@
       footer-renderer(final-tree, it, footer-content)
     },
   )
+
+  div(class: "grid lg:grid-cols-[1fr_14rem] md:ml-72 max-w-[64rem]", {
+    main-content
+    // in page toc
+    nav(class: "hidden lg:block right-0 top-0 h-fit sticky pt-5 dark:text-white", {
+      h2(class: "font-bold")[On this page]
+      ul(
+        class: {
+          "border-l border-neutral-300 dark:border-zinc-600 pl-3"
+          " [&>li]:my-3"
+          " [&>li>a]:block [&>li>a]:hover:underline [&>li>a]:decoration-2 [&>li>a]:underline-offset-4"
+        },
+        if it.headings.len() == 0 {
+          emph[This page does not contain any headings.]
+        } else {
+          for label in it.headings {
+            li(std.link(label, query(label).at(0).body))
+          }
+        },
+      )
+    })
+  })
 }
 
 #let update-elem(elem, state: none) = {
