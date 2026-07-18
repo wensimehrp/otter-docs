@@ -3,7 +3,6 @@
 #import "@preview/cmarker:0.1.10"
 
 #book(
-  debug: true,
   title: "Haita Docs Documentation",
   canonical-url: "https://wensimehrp.github.io",
   root: "haita",
