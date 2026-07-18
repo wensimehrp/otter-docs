@@ -11,20 +11,39 @@
   }
 }
 
+#let update-elem(elem, state: none) = {
+  let classes = elem.fields().attrs.at("class", default: ())
+  if type(classes) == str {
+    classes = classes.split(" ")
+  }
+  classes = classes.map(it => (it, none)).to-dict()
+  state.update(it => it + classes)
+  elem
+}
+
+#let page-classes = state("__new_hamber page classes", (:))
+#let a11y-skip-classes = {
+  "absolute left-4 top-0 -translate-y-full"
+  " focus:translate-y-4 focus-visible:translate-y-4"
+  " z-50 bg-white dark:bg-zinc-700 px-4 py-2"
+  " text-black dark:text-white"
+}
+
 #let summary-renderer(current-tree, current-chapter) = for it in current-tree {
+  let is-current-page = "page-label" in it and it.page-label == current-chapter.page-label
   html.div(
-    class: {
-      "w-full relative [&>a]:block [&>a]:border-y [&>a]:px-2 [&>a]:py-1"
-      if "page-label" in it and it.page-label == current-chapter.page-label {
-        " [&>a]:border-neutral-300 [&>a]:bg-white"
-        " [&>a]:dark:border-transparent [&>a]:dark:bg-zinc-700"
-      } else {
-        " [&>a]:border-transparent"
-        " [&>a]:hover:bg-neutral-200 [&>a]:dark:hover:bg-zinc-700"
-      }
-    },
     if it.kind == "chapter" {
-      std.link(it.page-label, it.title)
+      {
+        show html.elem.where(tag: "a"): set html.elem(attrs: if is-current-page {
+          (autofocus: "", aria-current: "page", id: "toc-current-page")
+        } else {
+          (class: "toc-entry-other-page")
+        })
+        std.link(it.page-label, it.title)
+      }
+      if is-current-page {
+        html.a(href: "#haita-main-content", class: a11y-skip-classes)[Skip to main content]
+      }
     } else if it.kind == "separator" {
       html.div(class: "w-full bg-neutral-300 dark:bg-zinc-600 h-[1px] my-3")
     } else {
@@ -156,6 +175,7 @@
       })[|||]
     })
     nav(
+      id: "main-toc",
       class: {
         "dark:text-white w-72 z-10 flex fixed left-0 top-0 h-full"
         " -translate-x-full shadow-sm md:shadow-none"
@@ -170,16 +190,34 @@
           elem("pagefind-modal")
         }
         div(
-          class: "border-t border-neutral-300 dark:border-transparent overflow-x-auto",
-          {
-            summary-renderer(final-tree, it)
+          class: {
+            "border-neutral-300 dark:border-transparent overflow-x-auto "
+            {
+              "block border-y px-2 py-1"
+              " border-neutral-300 bg-white"
+              " dark:border-transparent dark:bg-zinc-700"
+            }
+              .split(" ")
+              .map(cls => "[&_a[autofocus]]:" + cls)
+              .join(" ")
+            " "
+            {
+              "block border-y px-2 py-1"
+              " border-transparent"
+              " hover:bg-neutral-200 dark:hover:bg-zinc-700"
+            }
+              .split(" ")
+              .map(cls => "[&_a.toc-entry-other-page]:" + cls)
+              .join(" ")
           },
+          summary-renderer(final-tree, it),
         )
       },
     )
   })
 
   let main-content = article(
+    id: "haita-main-content",
     class: {
       "p-3 sm:p-6 md:p-8 min-w-full"
       " prose prose-neutral dark:prose-invert leading-normal"
@@ -209,6 +247,7 @@
   )
 
   div(class: "grid xl:grid-cols-[1fr_14rem] md:ml-72 max-w-[64rem]", {
+    a(href: "#toc-current-page", class: a11y-skip-classes)[Skip to current page in TOC]
     main-content
     // on page toc
     nav(class: "hidden xl:block right-0 top-0 h-fit sticky pt-5 dark:text-white leading-tight", {
@@ -229,16 +268,6 @@
       )
     })
   })
-}
-
-#let update-elem(elem, state: none) = {
-  let classes = elem.fields().attrs.at("class", default: ())
-  if type(classes) == str {
-    classes = classes.split(" ")
-  }
-  classes = classes.map(it => (it, none)).to-dict()
-  state.update(it => it + classes)
-  elem
 }
 
 #let og-property(type, ..args) = html.elem("meta", attrs: (property: "og:" + type, ..args.named()))
@@ -317,7 +346,6 @@
   let site-title = title
   import "@preview/typhoon:0.1.2"
   let stylesheet-path = "/" + (root, "styles.css").flatten().join("/")
-  let page-classes = state("__new_hamber page classes", (:))
   [
     #asset(
       stylesheet-path,
