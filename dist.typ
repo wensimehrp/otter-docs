@@ -24,7 +24,7 @@
     ),
     // tracking script
     extra-head-content: {
-      elem("script", attrs: (
+      html.elem("script", attrs: (
         defer: "",
         src: "https://umami-theta-pink.vercel.app/script.js",
         data-website-id: "bbe83d2b-314a-4023-87e7-765f49b46a0c",
