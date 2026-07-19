@@ -30,7 +30,7 @@ References for functions in Haita.
       html.span(class: "block", {
         if "default" in val {
           [#(key): ]
-          val.default
+          raw(lang: "typc", val.default)
           [ ]
         }
         for type in val.at("types", default: ()) {
