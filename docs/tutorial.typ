@@ -29,10 +29,12 @@ create a file named `dist.typ` that contains the following:
       chapter("index", content: include "doc/intro.typ"),
       // This will create haita/doc/tutorial.html. In this case,
       // the content of the chapter is not explicitly stated, so it
-      // look into ./doc/tutorial.typ in the current workspace.
+      // looks into ./doc/tutorial.typ in the current workspace.
       chapter("doc/tutorial"),
       // You can add dividers, which will separate content in the summary.
       divider(),
+      // you can also add arbitrary content
+      [Made with Haita],
       // Alternatively, if you would like to directly include the content
       // without creating a new file, you can write it like this:
       chapter("my-page", content: [

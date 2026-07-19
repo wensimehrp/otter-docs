@@ -26,6 +26,31 @@ a single requirement: #link("https://github.com/typst/typst")[Typst]. Here are s
 - Semantic output, and
 - Minimal setup
 
+#import "@preview/merman:0.1.0": mermaid
+
+#figure(caption: [How Haita Works], mermaid(
+  ```mermaid
+  flowchart LR
+  Typst --> Haita
+  Mermaid --> Haita
+  Markdown --> Haita
+  D[...] --> Haita
+  Haita --> HTML
+  Haita --> PDF
+  ```.text,
+))
+
+#figure(
+  caption: [A math formula example (#link(
+      "https://tex.stackexchange.com/questions/176443/large-equation-goes-out-of-margin-want-to-centre-it",
+    )[source])],
+  $
+    italic(W) = (Psi'^2 a b)/(2 mu_0) [
+      mu^2 + sum_(m,n) ((a^2_(m n))/4 ((m^2 n^2)/a^2 + (n^2 pi^2)/b^2 + mu^2) + (8 a_(m n) mu^2)/(pi^2 m n) )
+    ]
+  $,
+)
+
 The default theme, _New Hamber_, also supports dark mode.
 
 You can make a new project in Typst using Haita, set it to #link("https://github.com/typst/typst/pull/7964")[bundle
@@ -38,7 +63,7 @@ Haita is a decent choice for organizing long, comprehensive documentation. But j
 project, and is (currently) not a serious tool. Specifically, it's missing these features:
 
 - Internationalization support
-- Built-in search functions
+- Built-in search functions (#link(<pagefind-integration>)[pagefind integration] available)
 
 However, if you want pure Typst documentation, ease of use, and/or MathML formulae, you might want to give it a try. If
 you want stability and extremely easy syntax, then maybe you should consider mdBook. If you have any issues, please feel

@@ -57,10 +57,47 @@ A few examples include ```typ #table(columns: 3, ..csv("my_file.csv").flatten())
 them and ```typ #raw(block: true, lang: "rust", read("my_file.rs"))``` for reading content from a Rust file in your
 project's source code.
 
-= Integrating Pagefind
+= Integrating Pagefind <pagefind-integration>
 
 #link("https://pagefind.app/")[Pagefind] is a popular, fully static search library that is extremely convenient to use.
 It works with any static HTML output, hence it works with Haita. It adds a bit of JavaScript overhead.
+
+The default theme _New Hamber_ provides built-in support for Pagefind.
+
+- / *Download Pagefind*: follow the steps in https://pagefind.app/docs/installation/#downloading-a-precompiled-binary or
+    check if Pagefind is available in your package manager.
+
+    After installing, you should be able to run Pagefind in the command line using the command `pagefind`.
+
+- / *Enable _New Hamber_ integration*: Enable the `pagefind-enabled` setting in the html renderer as follows:
+  ```typ
+  #import "@preview/haita:...": book, new-hamber
+  #book(
+    html-renderer: new-hamber.html-renderer.with(
+      pagefind-enabled: true,
+    ),
+    .. // your regular content
+  )
+  ```
+
+- / *Running the Pagefind program*: After compiling your documentation, you need to run `pagefind` on your generated
+    files. Suppose you have a `dist.typ` file and your output is in `./dist`, you'd need to run this command:
+
+  ```sh
+  pagefind --site ./dist --output-subdir pagefind
+  ```
+
+  If you changed the root of your site (i.e. you are deploying to a subdir), you need to change the command.
+
+  ```sh
+  # if your subdir is `haita`
+  pagefind --site ./dist --output-subdir haita/pagefind
+  # if your subdir is `foo/bar/baz`
+  pagefind --site ./dist --output-subdir foo/bar/baz/pagefind
+  ```
+
+After you finished all of that, you should be able to see a pagefind searchbox in your main table of contents at the
+left hand side.
 
 = Embedding JavaScript
 
