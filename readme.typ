@@ -36,44 +36,41 @@
     License v2.0].
 ]
 
-#let sample = (
-  ```typ
-  #import "@preview/haita:__PACKAGE_VERSION__": * // Always remember to import the package
-  #book(
-    // The routing root. Useful when you are deploying to a folder
-    // under your root (e.g. when deployed to GitHub Pages)
-    // root: "haita",
-    // Your document's contents
-    tree: (
-      // You can add arbitrary content. The content will be displayed
-      // in the summary, but will not generate html pages.
-      [= Introduction],
-      // This will create haita/index.html. The content of the
-      // chapter will be from `doc/intro.typ`
-      chapter("index", content: include "doc/intro.typ"),
-      // This will create haita/doc/tutorial.html. In this case,
-      // the content of the chapter is not explicitly stated, so it
-      // looks into ./doc/tutorial.typ in the current workspace.
-      chapter("doc/tutorial"),
-      // You can add dividers, which will separate content in the summary.
-      divider(),
-      // you can also add arbitrary content
-      [Made with Haita],
-      // Alternatively, if you would like to directly include the content
-      // without creating a new file, you can write it like this:
-      chapter("my-page", content: [
-        #title[My Page]
-        = Heading 1
-        = Heading 2
-        foo bar baz
-      ]),
-      // you can add more chapters afterwards.
-    )
+#let sample-text = ```typ
+#import "@preview/haita:__PACKAGE_VERSION__": * // Always remember to import the package
+#book(
+  // The routing root. Useful when you are deploying to a folder
+  // under your root (e.g. when deployed to GitHub Pages)
+  // root: "haita",
+  // Your document's contents
+  tree: (
+    // You can add arbitrary content. The content will be displayed
+    // in the summary, but will not generate html pages.
+    [= Introduction],
+    // This will create haita/index.html. The content of the
+    // chapter will be from `doc/intro.typ`
+    chapter("index", content: include "doc/intro.typ"),
+    // This will create haita/doc/tutorial.html. In this case,
+    // the content of the chapter is not explicitly stated, so it
+    // looks into ./doc/tutorial.typ in the current workspace.
+    chapter("doc/tutorial"),
+    // You can add dividers, which will separate content in the summary.
+    divider(),
+    // you can also add arbitrary content
+    [Made with Haita],
+    // Alternatively, if you would like to directly include the content
+    // without creating a new file, you can write it like this:
+    chapter("my-page", content: [
+      #title[My Page]
+      = Heading 1
+      = Heading 2
+      foo bar baz
+    ]),
+    // you can add more chapters afterwards.
   )
-  ```
-    .text
-    .replace("__PACKAGE_VERSION__", toml("typst.toml").package.version)
 )
+```.text
+#let sample = sample-text.replace("__PACKAGE_VERSION__", toml("typst.toml").package.version)
 
 = Haita
 

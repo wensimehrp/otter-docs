@@ -8,7 +8,6 @@
 
   outputs =
     {
-      self,
       nixpkgs,
       flake-utils,
       ...
@@ -24,6 +23,7 @@
             pkgs.typst
             pkgs.pagefind
             pkgs.just
+            pkgs.ripgrep
           ];
         };
         # for converting Typst to Markdown

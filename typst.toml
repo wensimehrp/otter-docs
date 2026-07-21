@@ -1,6 +1,6 @@
 [package]
 name = "haita"
-version = "0.2.1"
+version = "0.3.0"
 entrypoint = "lib.typ"
 authors = ["Jeremy Gao <@wensimehrp>"]
 license = "Apache-2.0"
